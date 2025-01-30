@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     # Scan Configuration
     SCAN_INTERVAL_MINUTES: int
     
+    # API Authentication
+    API_USERNAME: str
+    API_PASSWORD: str
+    
     class Config:
         env_file = ".env"
 
