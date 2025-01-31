@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import reddit, twitter, bluesky, youtube
+from .routers import reddit, twitter, bluesky, youtube, instagram
 from .middleware.auth_middleware import BasicAuthMiddleware
 from .config.settings import get_settings
 
@@ -24,6 +24,7 @@ app.include_router(reddit.router)
 app.include_router(twitter.router)
 app.include_router(bluesky.router)
 app.include_router(youtube.router)
+app.include_router(instagram.router)
 
 @app.get("/")
 async def root():

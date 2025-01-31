@@ -189,3 +189,75 @@ youtube:
   exclude_keywords:
     - "spam"
     - "scam"
+
+instagram:
+  accounts:
+    - "nathanbarry"
+  keywords:
+  # Self-Promotion
+    - "time for self-promotion"
+    - "roll"
+    - "promote your startup"
+    - "plug your project"
+    - "promote your business"
+    - "showcase your startup"
+    - "post your project"
+    - "share your work"
+    - "launching soon"
+
+  # # Pain Points / Problems
+    - "painful"
+    - "biggest problem"
+    - "biggest struggle"
+    - "main challenge"
+    - "biggest pain points"
+    - "biggest pain point"
+    - "pain point"
+    - "roadblocks"
+    - "frustrating issue"
+    - "what's holding you back"
+    - "why startups fail"
+    - "what's stopping you from launching"
+    - "why my startup failed"
+
+    # Project / Building
+    - "what projects are you working on?"
+    - "what are you building right now"
+    - "what are you working on?"
+    - "what side project are you working on?"
+    - "what have you launched?"
+    - "working on something new?"
+    - "what have you built?"
+    - "show off your project"
+    - "what's your latest project?"
+    - "what's your current project?"
+    - "what's your latest side hustle?"
+    - "share what you've been working on"
+    - "share what you've built"
+
+    # SaaS & Idea Generation
+    - "looking for saas ideas"
+    - "saas ideas"
+    - "I need an idea"
+    - "I need a startup idea"
+    - "I need a business idea"
+    - "I need a SaaS idea"
+    - "startup ideas"
+    - "business ideas"
+    - "what's a good saas idea?"
+    - "any good startup ideas?"
+    - "brainstorm startup ideas"
+    - "anyone have saas ideas?"
+    - "help me come up with an idea"
+
+    # Growth / Marketing / Feedback
+    - "how to get first users"
+    - "how to get customers"
+    - "how to grow my startup"
+    - "how to grow my saas"
+    - "feedback on my SaaS"
+    - "how to market a saas"
+    - "how to promote my startup"
+  exclude_keywords:
+    - "spam"
+    - "scam"

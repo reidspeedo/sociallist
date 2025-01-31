@@ -33,6 +33,12 @@ class Settings(BaseSettings):
     # Youtube Configuration
     YOUTUBE_API_KEY: str
     
+    # Instagram Configuration
+    INSTAGRAM_USERNAME: str
+    INSTAGRAM_PASSWORD: str
+    INSTAGRAM_EMAIL: str
+    INSTAGRAM_EMAIL_PASSWORD: str
+    
     class Config:
         env_file = ".env"
 
