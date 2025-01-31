@@ -17,3 +17,4 @@ resend>=0.5.1
 pyyaml>=6.0.0
 sentence-transformers>=2.2.2
 numpy>=1.24.0
+google-api-python-client>=2.0.0

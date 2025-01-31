@@ -16,3 +16,4 @@ class SocialPost(BaseModel):
     community: Optional[str] = None  # Twitter community
     likes: Optional[int] = None      # Twitter likes
     retweets: Optional[int] = None   # Twitter retweets
+    video_id: Optional[str] = None  # YouTube specific  

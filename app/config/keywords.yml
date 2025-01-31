@@ -106,3 +106,21 @@ bluesky:
     - "pain points"
     - "biggest"
     - "struggle"
+
+youtube:
+  channels:
+    - "UCA-mWX9CvCTVFWRMb9bKc9w"  # Example channel ID
+  keywords:
+    - "pain point"
+    - "biggest"
+    - "problem"
+    - "ideas"
+    - "idea"
+    - "saas"
+    - "business"
+    - "startup"
+    - "struggle"
+    - "challenge"
+  exclude_keywords:
+    - "spam"
+    - "scam"
