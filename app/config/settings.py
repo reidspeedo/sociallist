@@ -22,11 +22,9 @@ class Settings(BaseSettings):
     API_PASSWORD: str
     
     # Twitter Configuration
-    TWITTER_API_KEY: str
-    TWITTER_API_SECRET: str
-    TWITTER_BEARER_TOKEN: str
-    TWITTER_ACCESS_TOKEN: str
-    TWITTER_ACCESS_SECRET: str
+    TWITTER_USERNAME: str
+    TWITTER_PASSWORD: str
+    TWITTER_EMAIL: str
     
     # Bluesky Configuration
     BLUESKY_EMAIL: str

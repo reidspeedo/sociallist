@@ -1,94 +1,105 @@
-import tweepy
-from datetime import datetime, timedelta
+from twikit import Client
+from datetime import datetime, timedelta, timezone
 from ..models.social_post import SocialPost
 from ..config.settings import get_settings, get_keywords
 from .matchers.base_matcher import BaseMatcher
-from typing import List
+from .matchers.question_matcher import QuestionMatcher
+from typing import List, Tuple
 import logging
-import asyncio
+from asyncio import sleep
 
 logger = logging.getLogger("uvicorn")
 
 class TwitterService:
     def __init__(self):
-        logger.info("Initializing TwitterService")
         self.settings = get_settings()
         self.keywords = get_keywords()["twitter"]
-        self.client = self._initialize_twitter()
-        logger.info(f"Configured to search keywords: {', '.join(self.keywords['search_terms'])}")
+        self.max_tweets = 100
+        self.client = None  # Initialize as None, will be set later
 
-    def _initialize_twitter(self):
-        try:
-            client = tweepy.Client(
-                bearer_token=self.settings.TWITTER_BEARER_TOKEN,
-                consumer_key=self.settings.TWITTER_API_KEY,
-                consumer_secret=self.settings.TWITTER_API_SECRET,
-                access_token=self.settings.TWITTER_ACCESS_TOKEN,
-                access_token_secret=self.settings.TWITTER_ACCESS_SECRET
-            )
-            logger.info("Successfully initialized Twitter API client")
-            return client
-        except Exception as e:
-            logger.error(f"Failed to initialize Twitter client: {str(e)}")
-            raise
+    async def _initialize_twitter(self):
+        max_retries = 3
+        retry_delay = 60  # seconds
+        
+        for attempt in range(max_retries):
+            try:
+                client = Client(language='en-US')
+                await client.login(
+                    auth_info_1=self.settings.TWITTER_USERNAME,
+                    auth_info_2=self.settings.TWITTER_EMAIL,
+                    password=self.settings.TWITTER_PASSWORD
+                )
+                logger.info("Successfully initialized Twitter client")
+                return client
+            except Exception as e:
+                if "blocked" in str(e).lower():
+                    if attempt < max_retries - 1:
+                        wait_time = retry_delay * (2 ** attempt)  # exponential backoff
+                        logger.warning(f"Twitter login blocked, waiting {wait_time}s before retry {attempt + 1}/{max_retries}")
+                        await sleep(wait_time)
+                        continue
+                logger.error(f"Failed to initialize Twitter client: {str(e)}")
+                raise
 
-    def _normalize_post(self, tweet, matched_keyword: str) -> SocialPost:
-        """Convert Twitter post to normalized SocialPost model"""
-        return SocialPost(
-            platform="twitter",
-            content=tweet.text,
-            title=None,  # Twitter doesn't have titles
-            author=str(tweet.author_id),  # Convert author_id to string
-            url=f"https://twitter.com/user/status/{tweet.id}",
-            timestamp=tweet.created_at,
-            keyword_matched=matched_keyword,
-            community=None,
-            likes=tweet.public_metrics['like_count'] if hasattr(tweet, 'public_metrics') else None,
-            retweets=tweet.public_metrics['retweet_count'] if hasattr(tweet, 'public_metrics') else None
-        )
+    async def ensure_client(self):  # Add method to ensure client is initialized
+        if self.client is None:
+            self.client = await self._initialize_twitter()
+
+    def _match_content(self, text: str) -> Tuple[bool, str]:
+        """Match content against keywords and patterns"""
+        # Try base keyword matching first
+        matches, keyword = BaseMatcher.match(text, self.keywords)
+        if matches:
+            logger.info(f"Found matching keyword: {keyword}")
+            return True, keyword
+        
+        # Try question matching
+        matches, pattern = QuestionMatcher.match(text, self.keywords)
+        if matches:
+            logger.info(f"Found matching question pattern: {pattern}")
+            return True, pattern
+        
+        return False, ""
 
     async def get_matching_posts(self) -> List[SocialPost]:
-        """Get posts matching configured keywords"""
-        matching_posts = []
-        scan_cutoff = datetime.utcnow() - timedelta(minutes=self.settings.SCAN_INTERVAL_MINUTES)
-        logger.info(f"Starting Twitter scan, cutoff time: {scan_cutoff}")
-
+        """Get posts from configured communities matching keywords"""
+        await self.ensure_client()
         try:
-            for search_term in self.keywords["search_terms"]:
-                try:
-                    logger.info(f"Searching for term: {search_term}")
+            matching_posts = []
+            scan_cutoff = datetime.utcnow().replace(tzinfo=timezone.utc) - timedelta(minutes=self.settings.SCAN_INTERVAL_MINUTES)
+            
+            # Search through each community
+            for community_id in self.keywords.get("communities", []):
+                tweets = await self.client.get_community_tweets(
+                    community_id=community_id,
+                    tweet_type='Latest',
+                    count=self.max_tweets
+                )
+                
+                for tweet in tweets:
+                    # Ensure tweet time is timezone-aware
+                    tweet_time = tweet.created_at_datetime
+                    if tweet_time.tzinfo is None:
+                        tweet_time = tweet_time.replace(tzinfo=timezone.utc)
                     
-                    # Add delay between requests to avoid rate limits
-                    await asyncio.sleep(1)  # 1 second delay between requests
-                    
-                    response = self.client.search_recent_tweets(
-                        query=f"{search_term} -is:retweet",
-                        max_results=10,  # Reduced from 100 to avoid hitting limits
-                        start_time=scan_cutoff,
-                        tweet_fields=['created_at', 'public_metrics', 'text', 'author_id']
-                    )
-                    
-                    if not response.data:
+                    if tweet_time < scan_cutoff:
                         continue
-
-                    for tweet in response.data:
-                        matching_posts.append(
-                            self._normalize_post(tweet, search_term)
-                        )
-
-                    logger.info(f"Completed searching term {search_term}, found {len(matching_posts)} matches")
-
-                except tweepy.TooManyRequests:
-                    logger.warning(f"Rate limit reached for term {search_term}, waiting 15 minutes")
-                    await asyncio.sleep(900)  # Wait 15 minutes
-                    continue
-                except Exception as e:
-                    logger.error(f"Error searching term {search_term}: {str(e)}")
-                    continue
+                    
+                    matches, keyword = self._match_content(tweet.text)
+                    if matches:
+                        matching_posts.append(SocialPost(
+                            platform="twitter",
+                            content=tweet.text,
+                            url=f"https://twitter.com/i/web/status/{tweet.id}",
+                            timestamp=tweet_time,
+                            author=tweet.user.screen_name,
+                            community=community_id,
+                            keyword_matched=keyword
+                        ))
+                
+            logger.info(f"Found {len(matching_posts)} matching Twitter posts")
+            return matching_posts
 
         except Exception as e:
-            logger.error(f"Error in Twitter scan: {str(e)}")
-            raise
-
-        logger.info(f"Scan complete. Found {len(matching_posts)} total matching posts")
-        return matching_posts 
+            logger.error(f"Failed to get matching Twitter posts: {str(e)}")
+            raise 
