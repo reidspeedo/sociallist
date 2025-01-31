@@ -13,3 +13,6 @@ class SocialPost(BaseModel):
     subreddit: Optional[str] = None  # Reddit specific
     score: Optional[int] = None      # Reddit specific
     num_comments: Optional[int] = None  # Reddit specific
+    community: Optional[str] = None  # Twitter community
+    likes: Optional[int] = None      # Twitter likes
+    retweets: Optional[int] = None   # Twitter retweets

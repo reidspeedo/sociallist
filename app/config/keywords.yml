@@ -9,6 +9,8 @@ reddit:
     - "startup_ideas"
     - "Business_Ideas"
     - "growmybusiness"
+    - "indiehackers"
+    - "appideas"
     - "EntrepreneurRideAlong"
   keywords:
   # Self-Promotion
@@ -61,7 +63,7 @@ reddit:
     - "I need a SaaS idea"
     - "startup ideas"
     - "business ideas"
-    - "what’s a good saas idea?"
+    - "what's a good saas idea?"
     - "any good startup ideas?"
     - "brainstorm startup ideas"
     - "anyone have saas ideas?"
@@ -77,3 +79,30 @@ reddit:
     - "how to promote my startup"
   exclude_keywords:
     - "spam"
+
+twitter:
+  search_terms:
+    - "business ideas"
+    - "pain points"
+  exclude_terms:
+    - "spam"
+    - "giveaway"
+
+bluesky:
+  feeds:
+    - "buildinginpublic.bsky.social/aaafflelemvyy"  # Build in Public
+    - "startygen.bsky.social/aaaoa5a2i37ji"         # Indie Hackers feed
+    - "mallat.bsky.social/aaac3lfajk4re"      # MallaT feed
+  keywords:
+    - "share your"
+    - "business ideas"
+    - "startup ideas"
+    - "side hustle"
+    - "side project"
+    - "ideas"
+    - "idea"
+    - "problem"
+    - "problems"
+    - "pain points"
+    - "biggest"
+    - "struggle"

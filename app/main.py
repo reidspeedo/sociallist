@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import reddit
+from .routers import reddit, twitter, bluesky
 from .middleware.auth_middleware import BasicAuthMiddleware
 from .config.settings import get_settings
 
@@ -21,6 +21,8 @@ app.add_middleware(
 
 # Include routers
 app.include_router(reddit.router)
+app.include_router(twitter.router)
+app.include_router(bluesky.router)
 
 @app.get("/")
 async def root():

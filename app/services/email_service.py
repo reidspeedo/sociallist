@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def create_email_content(posts: List[SocialPost]) -> str:
     html_content = f"""
     <h2>Social Listening Report - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</h2>
-    <p>Found {len(posts)} new matching posts on Reddit:</p>
+    <p>Found {len(posts)} new matching posts on</p>
     """
     
     for post in posts:

@@ -21,6 +21,17 @@ class Settings(BaseSettings):
     API_USERNAME: str
     API_PASSWORD: str
     
+    # Twitter Configuration
+    TWITTER_API_KEY: str
+    TWITTER_API_SECRET: str
+    TWITTER_BEARER_TOKEN: str
+    TWITTER_ACCESS_TOKEN: str
+    TWITTER_ACCESS_SECRET: str
+    
+    # Bluesky Configuration
+    BLUESKY_EMAIL: str = "rrrelatores@gmail.com"
+    BLUESKY_PASSWORD: str = "BAFFle8704!"
+    
     class Config:
         env_file = ".env"
 
