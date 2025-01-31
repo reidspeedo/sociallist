@@ -19,8 +19,8 @@ class BlueskyService:
         try:
             client = Client()
             client.login(
-                "admin@leadblooms.com",
-                "BAFFle8704!"
+                self.settings.BLUESKY_EMAIL,
+                self.settings.BLUESKY_PASSWORD
             )
             logger.info("Successfully initialized Bluesky API client")
             return client

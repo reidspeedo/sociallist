@@ -29,8 +29,8 @@ class Settings(BaseSettings):
     TWITTER_ACCESS_SECRET: str
     
     # Bluesky Configuration
-    BLUESKY_EMAIL: str = "rrrelatores@gmail.com"
-    BLUESKY_PASSWORD: str = "BAFFle8704!"
+    BLUESKY_EMAIL: str
+    BLUESKY_PASSWORD: str 
     
     class Config:
         env_file = ".env"
