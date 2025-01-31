@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     # Bluesky Configuration
     BLUESKY_EMAIL: str
     BLUESKY_PASSWORD: str 
+
+    # Youtube Configuration
+    YOUTUBE_API_KEY: str
     
     class Config:
         env_file = ".env"
