@@ -15,7 +15,7 @@ class TwitterService:
     def __init__(self):
         self.settings = get_settings()
         self.keywords = get_keywords()["twitter"]
-        self.max_tweets = random.randint(50, 100)  # Randomize max tweets per community
+        self.max_tweets = random.randint(95, 100)  # Randomize max tweets per community
         self.client = None  # Initialize as None, will be set later
 
     async def _initialize_twitter(self):
@@ -77,10 +77,10 @@ class TwitterService:
             for community_id in communities:
                 try:
                     # Random delay between communities (2-5 seconds)
-                    await sleep(random.uniform(2, 5))
+                    await sleep(random.uniform(5, 10))
                     
                     # Randomize tweet count for this community
-                    tweet_count = random.randint(30, self.max_tweets)
+                    tweet_count = random.randint(90, self.max_tweets)
                     logger.info(f"Fetching {tweet_count} tweets from community {community_id}")
                     
                     tweets = await self.client.get_community_tweets(
@@ -89,24 +89,19 @@ class TwitterService:
                         count=tweet_count
                     )
                     
-                    # Convert to list and randomize processing order
-                    tweets_list = list(tweets)
-                    random.shuffle(tweets_list)
-                    
-                    for tweet in tweets_list:
-                        # Random delay between tweet processing (0.5-2 seconds)
-                        await sleep(random.uniform(0.5, 2))
-                        
+                    for tweet in tweets:
                         # Ensure tweet time is timezone-aware
                         tweet_time = tweet.created_at_datetime
                         if tweet_time.tzinfo is None:
                             tweet_time = tweet_time.replace(tzinfo=timezone.utc)
+                        
                         
                         if tweet_time < scan_cutoff:
                             continue
                         
                         matches, keyword = self._match_content(tweet.text)
                         if matches:
+                            logger.info(f"Match found for tweet: {tweet.text} with keyword: {keyword}")
                             matching_posts.append(SocialPost(
                                 platform="twitter",
                                 content=tweet.text,
@@ -116,9 +111,6 @@ class TwitterService:
                                 community=community_id,
                                 keyword_matched=keyword
                             ))
-                            
-                            # Random delay after finding a match (1-3 seconds)
-                            await sleep(random.uniform(1, 3))
                     
                 except Exception as e:
                     logger.error(f"Error processing community {community_id}: {str(e)}")

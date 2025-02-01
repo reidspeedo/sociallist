@@ -1,3 +1,50 @@
+common_keywords: &common_keywords
+  - self-promotion
+  - self promotion
+  - self-promote
+  - self-promoting
+  - self-promotional
+  - share
+  - shares
+  - sharing
+  - promote
+  - promotes
+  - promoting
+  - promotion
+  - promotional
+  - plug
+  - plugs
+  - plugging
+  - showcase
+  - showcases
+  - showcasing
+  - problem
+  - problems
+  - problematic
+  - struggle
+  - struggles
+  - struggling
+  - challenge
+  - challenges
+  - challenging
+  - roadblock
+  - roadblocks
+  - pain point
+  - pain points
+  - building
+  - built
+  - builds
+  - latest project
+  - latest projects
+  - saas idea
+  - saas ideas
+  - startup idea
+  - startup ideas
+  - business idea
+  - business ideas
+  - ideas
+  - idea
+
 reddit:
   subreddits:
     - "Entrepreneur"
@@ -12,71 +59,7 @@ reddit:
     - "indiehackers"
     - "appideas"
     - "EntrepreneurRideAlong"
-  keywords:
-  # Self-Promotion
-    - "time for self-promotion"
-    - "self-promotion"
-    - "promote your startup"
-    - "plug your project"
-    - "promote your business"
-    - "showcase your startup"
-    - "post your project"
-    - "share your work"
-    - "launching soon"
-
-  # # Pain Points / Problems
-    - "painful"
-    - "biggest problem"
-    - "biggest struggle"
-    - "main challenge"
-    - "biggest pain points"
-    - "biggest pain point"
-    - "pain point"
-    - "roadblocks"
-    - "frustrating issue"
-    - "what's holding you back"
-    - "why startups fail"
-    - "what's stopping you from launching"
-    - "why my startup failed"
-
-    # Project / Building
-    - "what projects are you working on?"
-    - "what are you building right now"
-    - "what are you working on?"
-    - "what side project are you working on?"
-    - "what have you launched?"
-    - "working on something new?"
-    - "what have you built?"
-    - "show off your project"
-    - "what's your latest project?"
-    - "what's your current project?"
-    - "what's your latest side hustle?"
-    - "share what you've been working on"
-    - "share what you've built"
-
-    # SaaS & Idea Generation
-    - "looking for saas ideas"
-    - "saas ideas"
-    - "I need an idea"
-    - "I need a startup idea"
-    - "I need a business idea"
-    - "I need a SaaS idea"
-    - "startup ideas"
-    - "business ideas"
-    - "what's a good saas idea?"
-    - "any good startup ideas?"
-    - "brainstorm startup ideas"
-    - "anyone have saas ideas?"
-    - "help me come up with an idea"
-
-    # Growth / Marketing / Feedback
-    - "how to get first users"
-    - "how to get customers"
-    - "how to grow my startup"
-    - "how to grow my saas"
-    - "feedback on my SaaS"
-    - "how to market a saas"
-    - "how to promote my startup"
+  keywords: *common_keywords
   exclude_keywords:
     - "spam"
 
@@ -84,71 +67,7 @@ twitter:
   communities:
     - "1471580197908586507"  # First community
     - "1493446837214187523"  # Second community
-  keywords:
-  # Self-Promotion
-    - "time for self-promotion"
-    - "self-promotion"
-    - "promote your startup"
-    - "plug your project"
-    - "promote your business"
-    - "showcase your startup"
-    - "post your project"
-    - "share your work"
-    - "launching soon"
-
-  # # Pain Points / Problems
-    - "painful"
-    - "biggest problem"
-    - "biggest struggle"
-    - "main challenge"
-    - "biggest pain points"
-    - "biggest pain point"
-    - "pain point"
-    - "roadblocks"
-    - "frustrating issue"
-    - "what's holding you back"
-    - "why startups fail"
-    - "what's stopping you from launching"
-    - "why my startup failed"
-
-    # Project / Building
-    - "what projects are you working on?"
-    - "what are you building right now"
-    - "what are you working on?"
-    - "what side project are you working on?"
-    - "what have you launched?"
-    - "working on something new?"
-    - "what have you built?"
-    - "show off your project"
-    - "what's your latest project?"
-    - "what's your current project?"
-    - "what's your latest side hustle?"
-    - "share what you've been working on"
-    - "share what you've built"
-
-    # SaaS & Idea Generation
-    - "looking for saas ideas"
-    - "saas ideas"
-    - "I need an idea"
-    - "I need a startup idea"
-    - "I need a business idea"
-    - "I need a SaaS idea"
-    - "startup ideas"
-    - "business ideas"
-    - "what's a good saas idea?"
-    - "any good startup ideas?"
-    - "brainstorm startup ideas"
-    - "anyone have saas ideas?"
-    - "help me come up with an idea"
-
-    # Growth / Marketing / Feedback
-    - "how to get first users"
-    - "how to get customers"
-    - "how to grow my startup"
-    - "how to grow my saas"
-    - "feedback on my SaaS"
-    - "how to market a saas"
-    - "how to promote my startup"
+  keywords: *common_keywords
   exclude_terms:
     - "spam"
     - "giveaway"
@@ -158,34 +77,12 @@ bluesky:
     - "buildinginpublic.bsky.social/aaafflelemvyy"  # Build in Public
     - "startygen.bsky.social/aaaoa5a2i37ji"         # Indie Hackers feed
     - "mallat.bsky.social/aaac3lfajk4re"      # MallaT feed
-  keywords:
-    - "share your"
-    - "business ideas"
-    - "startup ideas"
-    - "side hustle"
-    - "side project"
-    - "ideas"
-    - "idea"
-    - "problem"
-    - "problems"
-    - "pain points"
-    - "biggest"
-    - "struggle"
+  keywords: *common_keywords
 
 youtube:
   channels:
     - "UCA-mWX9CvCTVFWRMb9bKc9w"  # Example channel ID
-  keywords:
-    - "pain point"
-    - "biggest"
-    - "problem"
-    - "ideas"
-    - "idea"
-    - "saas"
-    - "business"
-    - "startup"
-    - "struggle"
-    - "challenge"
+  keywords: *common_keywords
   exclude_keywords:
     - "spam"
     - "scam"
@@ -193,71 +90,7 @@ youtube:
 instagram:
   accounts:
     - "nathanbarry"
-  keywords:
-  # Self-Promotion
-    - "time for self-promotion"
-    - "roll"
-    - "promote your startup"
-    - "plug your project"
-    - "promote your business"
-    - "showcase your startup"
-    - "post your project"
-    - "share your work"
-    - "launching soon"
-
-  # # Pain Points / Problems
-    - "painful"
-    - "biggest problem"
-    - "biggest struggle"
-    - "main challenge"
-    - "biggest pain points"
-    - "biggest pain point"
-    - "pain point"
-    - "roadblocks"
-    - "frustrating issue"
-    - "what's holding you back"
-    - "why startups fail"
-    - "what's stopping you from launching"
-    - "why my startup failed"
-
-    # Project / Building
-    - "what projects are you working on?"
-    - "what are you building right now"
-    - "what are you working on?"
-    - "what side project are you working on?"
-    - "what have you launched?"
-    - "working on something new?"
-    - "what have you built?"
-    - "show off your project"
-    - "what's your latest project?"
-    - "what's your current project?"
-    - "what's your latest side hustle?"
-    - "share what you've been working on"
-    - "share what you've built"
-
-    # SaaS & Idea Generation
-    - "looking for saas ideas"
-    - "saas ideas"
-    - "I need an idea"
-    - "I need a startup idea"
-    - "I need a business idea"
-    - "I need a SaaS idea"
-    - "startup ideas"
-    - "business ideas"
-    - "what's a good saas idea?"
-    - "any good startup ideas?"
-    - "brainstorm startup ideas"
-    - "anyone have saas ideas?"
-    - "help me come up with an idea"
-
-    # Growth / Marketing / Feedback
-    - "how to get first users"
-    - "how to get customers"
-    - "how to grow my startup"
-    - "how to grow my saas"
-    - "feedback on my SaaS"
-    - "how to market a saas"
-    - "how to promote my startup"
+  keywords: *common_keywords
   exclude_keywords:
     - "spam"
     - "scam"
