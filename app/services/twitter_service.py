@@ -9,6 +9,7 @@ import logging
 from asyncio import sleep
 import random
 import os
+import json
 
 logger = logging.getLogger("uvicorn")
 
@@ -23,24 +24,45 @@ class TwitterService:
         max_retries = 3
         retry_delay = 60  # seconds
         cookies_file = "cookies.json"
-        
+        # Instead of a fixed threshold, choose a random threshold between 2 and 4 days
+        random_days = random.uniform(2, 4)
+        cookies_age_limit = timedelta(days=random_days)
+        logger.info(f"Using a cookies refresh threshold of {random_days:.2f} days")
+
         for attempt in range(max_retries):
             try:
                 client = Client(language='en-US')
-                
-                # Reuse cookies if available, otherwise perform login and save cookies
+
+                # Check if cookies exist and are still within the randomized valid window
                 if os.path.exists(cookies_file):
-                    client.load_cookies(cookies_file)
-                    logger.info("Loaded saved cookies, skipping login")
-                else:
-                    await client.login(
-                        auth_info_1=self.settings.TWITTER_USERNAME,
-                        auth_info_2=self.settings.TWITTER_EMAIL,
-                        password=self.settings.TWITTER_PASSWORD
-                    )
-                    client.save_cookies(cookies_file)
-                    logger.info("Logged in and saved cookies")
+                    with open(cookies_file, 'r') as f:
+                        cookies_data = json.load(f)
+                        last_refreshed = datetime.fromisoformat(
+                            cookies_data.get('last_refreshed', '1970-01-01T00:00:00')
+                        )
                     
+                    if datetime.now() - last_refreshed < cookies_age_limit:
+                        client.load_cookies(cookies_file)
+                        logger.info("Loaded saved cookies, skipping login")
+                        return client
+
+                # Perform login and save cookies with a timestamp
+                await client.login(
+                    auth_info_1=self.settings.TWITTER_USERNAME,
+                    auth_info_2=self.settings.TWITTER_EMAIL,
+                    password=self.settings.TWITTER_PASSWORD
+                )
+                client.save_cookies(cookies_file)
+
+                # Update cookies file with a new timestamp
+                with open(cookies_file, 'r+') as f:
+                    cookies_data = json.load(f)
+                    cookies_data['last_refreshed'] = datetime.now().isoformat()
+                    f.seek(0)
+                    json.dump(cookies_data, f)
+                    f.truncate()
+
+                logger.info("Logged in and saved cookies")
                 return client
             except Exception as e:
                 # If blocked, retry with exponential backoff
@@ -73,6 +95,11 @@ class TwitterService:
 
     async def get_matching_posts(self) -> List[SocialPost]:
         """Get posts from configured communities matching keywords"""
+        # Add a random delay (2-5 minutes) before starting the service to mimic a non-automated behavior.
+        random_delay = random.uniform(120, 300)
+        logger.info(f"Waiting for {random_delay:.2f} seconds before starting Twitter service")
+        await sleep(random_delay)
+
         await self.ensure_client()
         try:
             matching_posts = []
