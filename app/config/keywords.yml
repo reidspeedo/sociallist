@@ -65,8 +65,15 @@ reddit:
 
 twitter:
   communities:
-    - "1471580197908586507"  # First community
-    - "1493446837214187523"  # Second community
+    - "1523269557816856576" # Indie Hackers
+    - "1824090181827457380" # Tech Founders
+    - "1669886565928300545" # SaaS & AI
+    - "1808068384925360335" # Online Earning & Learning
+    - "1498737511241158657" # start up founders and friends
+    - "1497277132191547394" # Micro & Niche SaaS
+    - "1492982239960969222" # Indie Makers
+    - "1471580197908586507" # Building in Public
+    - "1493446837214187523" # Start up Community
   keywords: *common_keywords
   exclude_terms:
     - "spam"
@@ -81,7 +88,16 @@ bluesky:
 
 youtube:
   channels:
-    - "UCA-mWX9CvCTVFWRMb9bKc9w"  # Example channel ID
+    - "UCMo28ATCDU0Kn9dpilAF79Q"  # Simon Høiberg
+    - "UCsg20ERGZt9eHVZRXROJSqg" # TheBrettWay
+    - "UChhw6DlKKTQ9mYSpTfXUYqA" #starterstory
+    - "UCHoBKQDRkJcOY2BO47q5Ruw" #MicroConf
+    - "UCUseoG3kofRLS6WoUaL_15w" #TKKader
+    - "UCEJ3Bv-zDYMmtACIyFo4nGQ" #dennisbabych
+    - "UCrJrY9gMcbRL2APnFCXiuBQ" # wearenocode
+    - "UC2JuGCGQ0c71WIyL_MlY5eg" # alexheiden
+    - "UCVBNyvcHbffDw61L4sikLtQ" # stevencravotta
+    - "UCfQk5qGOEO5cPPDFlQe2lFQ" # YourAverageTechBro
   keywords: *common_keywords
   exclude_keywords:
     - "spam"
