@@ -29,14 +29,14 @@ async def scan_all(apply_ai_filter: bool = False):
     try:
         # Get initial matches from all services
         reddit_service = RedditService()
-        # twitter_service = TwitterService()
+        twitter_service = TwitterService()
         bluesky_service = BlueskyService()
         youtube_service = YouTubeService()
 
         # Collect all initial matches
         all_posts = (
             await reddit_service.get_matching_posts() +
-            # await twitter_service.get_matching_posts() +
+            await twitter_service.get_matching_posts() +
             await bluesky_service.get_matching_posts() +
             await youtube_service.get_matching_posts()
         )
