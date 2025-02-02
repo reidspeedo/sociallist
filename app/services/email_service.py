@@ -24,49 +24,38 @@ def create_email_content(posts: List[SocialPost]) -> str:
         html_content += f"<h3>{platform.title()} - {len(platform_posts)} posts</h3>"
         
         for post in platform_posts:
-            html_content += f"""
-            <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
+            html_content += """
+            <table style="width: 100%; margin-bottom: 15px; border-collapse: collapse; border: 1px solid #e0e0e0;">
+                <tr style="background-color: #f5f5f5;">
+                    <td style="padding: 10px;">
             """
-
-            # Title section (Reddit has titles, others use content preview)
+            
+            # Add the title/preview as a link
             if post.title:
-                html_content += f'<h3><a href="{post.url}">{post.title}</a></h3>'
+                html_content += f'<a href="{post.url}" style="text-decoration: none; color: #0066cc; font-weight: bold;">{post.title}</a>'
             else:
                 preview = post.content[:100] + "..." if len(post.content) > 100 else post.content
-                html_content += f'<h3><a href="{post.url}">{preview}</a></h3>'
-
-            # Platform-specific fields
-            if platform == "reddit":
-                html_content += f"""
-                <p><strong>Subreddit:</strong> r/{post.subreddit}</p>
-                <p><strong>Author:</strong> u/{post.author}</p>
-                <p><strong>Score:</strong> {post.score} | <strong>Comments:</strong> {post.num_comments}</p>
-                """
-            elif platform == "twitter":
-                html_content += f"""
-                <p><strong>Author:</strong> @{post.author}</p>
-                <p><strong>Likes:</strong> {post.likes} | <strong>Retweets:</strong> {post.retweets}</p>
-                """
-            elif platform == "bluesky":
-                html_content += f"""
-                <p><strong>Author:</strong> {post.author}</p>
-                <p><strong>Likes:</strong> {post.likes}</p>
-                """
-            elif platform == "youtube":
-                html_content += f"""
-                <p><strong>Author:</strong> {post.author}</p>
-                <p><strong>Video ID:</strong> {post.video_id}</p>
-                <p><strong>Likes:</strong> {post.likes}</p>
-                """
-
-            # Common fields for all platforms
+                html_content += f'<a href="{post.url}" style="text-decoration: none; color: #0066cc; font-weight: bold;">{preview}</a>'
+            
+            html_content += """
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">
+            """
+            
+            # Only show content preview and matched keyword
             html_content += f"""
                 <p><strong>Matched Keyword:</strong> {post.keyword_matched}</p>
                 <p><strong>Content Preview:</strong> {post.content[:200]}...</p>
-                <p><strong>Posted:</strong> {post.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</p>
-            </div>
             """
-    
+            
+            html_content += """
+                    </td>
+                </tr>
+            </table>
+            """
+
     return html_content
 
 async def send_notification(posts: List[SocialPost]):

@@ -9,6 +9,7 @@ def test_aggregate_scan():
     
     # API endpoint
     url = "http://localhost:8000/aggregate/scan"  # For local testing
+    # url = "https://sociallist-production.up.railway.app/aggregate/scan"
 
     # Make a GET request with basic authentication
     response = requests.get(

@@ -39,6 +39,9 @@ class Settings(BaseSettings):
     INSTAGRAM_EMAIL: str
     INSTAGRAM_EMAIL_PASSWORD: str
     
+    # OpenAI Configuration
+    OPENAI_API_KEY: str
+    
     class Config:
         env_file = ".env"
 
