@@ -54,7 +54,7 @@ class YouTubeService:
                         channelId=channel_id,
                         order="date",
                         part="snippet",
-                        maxResults=5,
+                        maxResults=10,
                         type="video"
                     ).execute()
 
@@ -74,7 +74,7 @@ class YouTubeService:
                                     comments_response = self.youtube.commentThreads().list(
                                         part="snippet",
                                         videoId=video_id,
-                                        maxResults=100,
+                                        maxResults=300,
                                         order="time",
                                         pageToken=next_page_token
                                     ).execute()

@@ -104,7 +104,7 @@ class RedditService:
                     subreddit = await self.reddit.subreddit(subreddit_name)
                     posts_checked = 0
                     
-                    async for submission in subreddit.new(limit=100):
+                    async for submission in subreddit.new(limit=500):
                         posts_checked += 1
                         post_time = datetime.fromtimestamp(submission.created_utc)
                         if post_time < scan_cutoff:
