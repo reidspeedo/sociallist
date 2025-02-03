@@ -6,6 +6,7 @@ from .matchers.base_matcher import BaseMatcher
 from typing import List, Tuple
 import logging
 import asyncio
+from googleapiclient.errors import HttpError
 
 logger = logging.getLogger("uvicorn")
 
@@ -69,13 +70,19 @@ class YouTubeService:
                             comments_to_process = True
 
                             while comments_to_process:
-                                comments_response = self.youtube.commentThreads().list(
-                                    part="snippet",
-                                    videoId=video_id,
-                                    maxResults=100,
-                                    order="time",
-                                    pageToken=next_page_token
-                                ).execute()
+                                try:
+                                    comments_response = self.youtube.commentThreads().list(
+                                        part="snippet",
+                                        videoId=video_id,
+                                        maxResults=100,
+                                        order="time",
+                                        pageToken=next_page_token
+                                    ).execute()
+                                except HttpError as e:
+                                    if "commentsDisabled" in str(e):
+                                        logger.info(f"Skipping video {video_id} - comments are disabled")
+                                        break
+                                    raise
 
                                 comments = comments_response.get("items", [])
 
