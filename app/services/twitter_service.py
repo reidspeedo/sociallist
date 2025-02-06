@@ -17,7 +17,7 @@ class TwitterService:
     def __init__(self):
         self.settings = get_settings()
         self.keywords = get_keywords()["twitter"]
-        self.max_tweets = random.randint(495, 500)  # Randomize max tweets per community
+        self.max_tweets = random.randint(95, 100)  # Randomize max tweets per community
         self.client = None  # Initialize as None, will be set later
 
     async def _initialize_twitter(self):

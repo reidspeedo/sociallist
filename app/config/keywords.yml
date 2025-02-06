@@ -62,7 +62,7 @@ reddit:
   keywords: *common_keywords
   exclude_keywords:
     - "spam"
-
+    - "I will not promote"
 twitter:
   communities:
     - "1523269557816856576" # Indie Hackers
@@ -78,6 +78,7 @@ twitter:
   exclude_terms:
     - "spam"
     - "giveaway"
+    - "I will not promote"
 
 bluesky:
   feeds:
@@ -85,6 +86,8 @@ bluesky:
     - "startygen.bsky.social/aaaoa5a2i37ji"         # Indie Hackers feed
     - "mallat.bsky.social/aaac3lfajk4re"      # MallaT feed
   keywords: *common_keywords
+  exclude_keywords:
+    - "I will not promote"
 
 youtube:
   channels:
@@ -102,6 +105,7 @@ youtube:
   exclude_keywords:
     - "spam"
     - "scam"
+    - "I will not promote"
 
 instagram:
   accounts:
@@ -110,3 +114,4 @@ instagram:
   exclude_keywords:
     - "spam"
     - "scam"
+    - "I will not promote"

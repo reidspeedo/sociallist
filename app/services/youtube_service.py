@@ -59,6 +59,7 @@ class YouTubeService:
                     ).execute()
 
                     videos = videos_response.get("items", [])
+                    logger.info(f"Found {len(videos)} videos for channel {channel_id}")
                     video_details = [
                         (video["id"]["videoId"], video["snippet"]["title"])
                         for video in videos
@@ -66,15 +67,18 @@ class YouTubeService:
 
                     for video_id, video_title in video_details:
                         try:
+                            logger.info(f"Processing video: {video_title} (ID: {video_id})")
                             next_page_token = None
                             comments_to_process = True
+                            comments_processed = 0
 
                             while comments_to_process:
                                 try:
+                                    logger.debug(f"Fetching comments page {comments_processed//100 + 1} for video {video_id}")
                                     comments_response = self.youtube.commentThreads().list(
                                         part="snippet",
                                         videoId=video_id,
-                                        maxResults=300,
+                                        maxResults=100,
                                         order="time",
                                         pageToken=next_page_token
                                     ).execute()
@@ -85,6 +89,8 @@ class YouTubeService:
                                     raise
 
                                 comments = comments_response.get("items", [])
+                                comments_processed += len(comments)
+                                logger.info(f"Processing {len(comments)} comments from video {video_title} (Total: {comments_processed})")
 
                                 for comment_thread in comments:
                                     comment = comment_thread["snippet"]["topLevelComment"]
@@ -93,6 +99,7 @@ class YouTubeService:
                                     )
                                     
                                     if comment_time < scan_cutoff:
+                                        logger.info(f"Reached cutoff time in video {video_title} after {comments_processed} comments")
                                         comments_to_process = False
                                         break
 
@@ -102,15 +109,19 @@ class YouTubeService:
                                     )
                                     
                                     if matches:
+                                        logger.info(f"Found matching comment in video {video_title} with keyword: {keyword}")
                                         matching_posts.append(
                                             self._normalize_post(comment, video_id, video_title, keyword)
                                         )
 
                                 if not comments_to_process or "nextPageToken" not in comments_response:
+                                    logger.debug(f"No more comments to process for video {video_id}")
                                     comments_to_process = False
                                 else:
                                     next_page_token = comments_response["nextPageToken"]
                                     await asyncio.sleep(0.1)
+
+                            logger.info(f"Completed processing video {video_title} - processed {comments_processed} comments")
 
                         except Exception as e:
                             logger.error(f"Error processing video {video_id}: {str(e)}")

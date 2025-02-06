@@ -12,6 +12,8 @@ import imaplib
 import email
 import re
 import random
+import json
+import os
 
 logger = logging.getLogger("uvicorn")
 
@@ -20,6 +22,7 @@ class InstagramService:
         logger.info("Initializing InstagramService")
         self.settings = get_settings()
         self.keywords = get_keywords()["instagram"]
+        self.session_file = "instagram_session.json"
         self.client = self._initialize_client()
 
     def _change_password_handler(self, username):
@@ -94,11 +97,34 @@ class InstagramService:
             client.challenge_code_handler = self._challenge_code_handler
             client.change_password_handler = self._change_password_handler
             
-            # Attempt login
+            # Try to load existing session
+            if os.path.exists(self.session_file):
+                try:
+                    logger.info("Loading existing Instagram session")
+                    with open(self.session_file) as f:
+                        cached_settings = json.load(f)
+                    client.set_settings(cached_settings)
+                    # Verify the session is still valid
+                    client.get_timeline_feed()
+                    logger.info("Successfully restored Instagram session")
+                    return client
+                except Exception as e:
+                    logger.warning(f"Failed to restore session: {str(e)}")
+                    # If session is invalid, remove the file
+                    os.remove(self.session_file)
+            
+            # If no valid session exists, perform fresh login
+            logger.info("Performing fresh Instagram login")
             client.login(
                 self.settings.INSTAGRAM_USERNAME,
                 self.settings.INSTAGRAM_PASSWORD
             )
+            
+            # Save the new session
+            with open(self.session_file, 'w') as f:
+                json.dump(client.get_settings(), f)
+            logger.info("Saved new Instagram session")
+            
             return client
         except Exception as e:
             logger.error(f"Failed to initialize Instagram client: {str(e)}")
@@ -139,12 +165,30 @@ class InstagramService:
                 
                 try:
                     await asyncio.sleep(random.uniform(3, 6))
-                    user_id = self.client.user_id_from_username(username)
+                    try:
+                        user_id = self.client.user_id_from_username(username)
+                    except Exception as e:
+                        if "login_required" in str(e).lower():
+                            logger.warning("Session expired during scan, attempting to re-authenticate")
+                            self.client = self._initialize_client()
+                            user_id = self.client.user_id_from_username(username)
+                        else:
+                            raise
+                    
                     logger.info(f"Got user_id {user_id} for {username}")
                     
                     await asyncio.sleep(random.uniform(2, 4))
                     reels_amount = random.randint(10, 15)
-                    medias = list(self.client.user_clips(user_id, amount=reels_amount))
+                    try:
+                        medias = list(self.client.user_clips(user_id, amount=reels_amount))
+                    except Exception as e:
+                        if "login_required" in str(e).lower():
+                            logger.warning("Session expired during scan, attempting to re-authenticate")
+                            self.client = self._initialize_client()
+                            medias = list(self.client.user_clips(user_id, amount=reels_amount))
+                        else:
+                            raise
+                            
                     logger.info(f"Fetched {len(medias)} reels for {username}")
                     
                     if not medias:
@@ -160,7 +204,16 @@ class InstagramService:
                         
                         try:
                             # Check if reel has comments first
-                            media_info = self.client.media_info(media.id)
+                            try:
+                                media_info = self.client.media_info(media.id)
+                            except Exception as e:
+                                if "login_required" in str(e).lower():
+                                    logger.warning("Session expired during scan, attempting to re-authenticate")
+                                    self.client = self._initialize_client()
+                                    media_info = self.client.media_info(media.id)
+                                else:
+                                    raise
+                                    
                             comment_count = getattr(media_info, 'comment_count', 0)
                             
                             logger.info(f"Comment count from media_info: {comment_count}")
@@ -182,11 +235,24 @@ class InstagramService:
                             
                             while True:
                                 logger.info(f"Fetching comments chunk (size={chunk_size}, min_id={next_min_id})")
-                                comments_chunk, next_min_id = self.client.media_comments_chunk(
-                                    media.id,
-                                    max_amount=chunk_size,
-                                    min_id=next_min_id
-                                )
+                                try:
+                                    comments_chunk, next_min_id = self.client.media_comments_chunk(
+                                        media.id,
+                                        max_amount=chunk_size,
+                                        min_id=next_min_id
+                                    )
+                                except Exception as e:
+                                    if "login_required" in str(e).lower():
+                                        logger.warning("Session expired during scan, attempting to re-authenticate")
+                                        self.client = self._initialize_client()
+                                        comments_chunk, next_min_id = self.client.media_comments_chunk(
+                                            media.id,
+                                            max_amount=chunk_size,
+                                            min_id=next_min_id
+                                        )
+                                    else:
+                                        raise
+                                        
                                 chunk_comments = list(comments_chunk)
                                 logger.info(f"Retrieved {len(chunk_comments)} comments in this chunk")
                                 
