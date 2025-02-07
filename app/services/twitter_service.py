@@ -17,7 +17,7 @@ class TwitterService:
     def __init__(self):
         self.settings = get_settings()
         self.keywords = get_keywords()["twitter"]
-        self.max_tweets = random.randint(95, 100)  # Randomize max tweets per community
+        self.max_tweets = random.randint(90, 100)  # Randomize max tweets per community
         self.client = None  # Initialize as None, will be set later
 
     async def _initialize_twitter(self):
@@ -111,7 +111,7 @@ class TwitterService:
             for community_id in communities:
                 try:
                     # Random delay between communities (2-5 seconds)
-                    await sleep(random.uniform(2, 5))
+                    await sleep(random.uniform(60, 120))
                     
                     # Randomize tweet count for this community
                     tweet_count = random.randint(30, self.max_tweets)
