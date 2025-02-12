@@ -36,7 +36,7 @@ async def scan_all(apply_ai_filter: bool = False):
         # Collect all initial matches
         all_posts = (
             await reddit_service.get_matching_posts() +
-            await twitter_service.get_matching_posts() +
+            # await twitter_service.get_matching_posts()
             await bluesky_service.get_matching_posts() +
             await youtube_service.get_matching_posts()
         )

@@ -96,7 +96,7 @@ class TwitterService:
     async def get_matching_posts(self) -> List[SocialPost]:
         """Get posts from configured communities matching keywords"""
         # Add a random delay (2-5 minutes) before starting the service to mimic a non-automated behavior.
-        random_delay = random.uniform(120, 300)
+        random_delay = random.uniform(0, 2)
         logger.info(f"Waiting for {random_delay:.2f} seconds before starting Twitter service")
         await sleep(random_delay)
 
@@ -111,7 +111,7 @@ class TwitterService:
             for community_id in communities:
                 try:
                     # Random delay between communities (2-5 seconds)
-                    await sleep(random.uniform(60, 120))
+                    await sleep(random.uniform(2, 5))
                     
                     # Randomize tweet count for this community
                     tweet_count = random.randint(30, self.max_tweets)
